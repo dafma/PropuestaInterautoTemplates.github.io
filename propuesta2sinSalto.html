@@ -1,0 +1,1661 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interauto</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"  crossorigin="anonymous">
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script src="https://use.fontawesome.com/9d2185a041.js"></script>
+    <style rel="stylesheet" type="text/css" href="/static/style.css" ></style>
+    <style rel="stylesheet">
+        .mes{
+            background-color: #F57C00;
+        }
+        .C01{
+            background-color: #009688;
+        }
+        .C02{
+            background-color: #FFC107;
+
+        }
+        .C03{
+            background-color: #F57C00;
+        }
+        .rojo{
+            color: #ff1e26;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+        .amarillo{
+            color: #fff721;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+        .verde{
+            color: #27ff11;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+
+        .meses{
+            background-color: #FFA726;
+        }
+
+        .azul{
+            background-color: dodgerblue;
+        }
+        td{text-align: center}
+        th{
+            text-align: center;
+            font-size: xx-large;
+        }
+        .comprador{
+            font-size: large;
+        }
+        .btn-circle {
+          width: 10px;
+          height: 10px;
+          text-align: center;
+          padding: 6px 0;
+          font-size: 8px;
+          line-height: 1.428571429;
+          border-radius: 15px;
+        }
+          td {   text-align: center;}
+          #span1 { background-color: #2196F3; width: auto ; }
+          #span2 { background-color: #FFEB3B; width: auto;  }
+          #span3 { background-color: #f44336; width: auto;  }
+          #span4 { background-color: #388e3c; width: auto;  }
+         
+    </style>
+    
+
+    
+
+</head>
+<body>
+
+
+
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" id="exampleModalLabel">Detalle</h1>
+                    <button class="btn btn-primary btn-lg btn-block">VerInfo</button>
+                </div>
+                <div class="modal-body">
+                    <div id="orderDetails"></div>
+                     <table class="table table-bordered">
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Estatus</th>
+                    </tr>
+                    <tr>
+                        <td>Numero Contenedor</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de Llegada</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Forwater</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Numero de Mercancia</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Puerto Llegada</td>
+                        <td></td>
+                    </tr>
+                </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="row">
+    
+
+    
+</div>
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+
+<style>
+    .modal-dialog {
+    position: relative;
+    width: 100%;
+    margin: 10px;
+}
+</style>
+
+<script>
+    $(function(){
+    $('#exampleModal1').modal({
+        keyboard: true,
+        backdrop: "static",
+        show:false,
+
+    }).on('show', function(){
+          var getIdFromRow = $(event.target).closest('tr').data('id');
+        //make your ajax call populate items or what even you need
+        $(this).find('#orderDetails').html($('<h1> Order Id selected: ' + getIdFromRow  + '</h1>'))
+    });
+});
+
+
+$(document).ready(function() {
+
+    // AJAX GET
+    $('.get-more').click(function(){
+
+        $.ajax({
+            type: "GET",
+            url: "/ajax/more/",
+            success: function(data) {
+            for(i = 0; i < data.length; i++){
+                $('ul').append('<li>'+data[i]+'</li>');
+            }
+        }
+        });
+
+    });
+
+
+    // AJAX POST
+    $('.add-todo').click(function(){
+      console.log('am i called');
+
+        $.ajax({
+            type: "POST",
+            url: "/ajax/add/",
+            dataType: "json",
+            data: { "item": $(".todo-item").val() },
+            success: function(data) {
+                alert(data.message);
+            }
+        });
+
+    });
+
+
+
+    // CSRF code
+    function getCookie(name) {
+        var cookieValue = null;
+        var i = 0;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (i; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+    <style>
+    ._24{
+        background-color: #2196F3;
+    }
+        ul#menu li {
+        display:inline;
+    }
+
+    .C01{
+        background-color: #d9edf7;
+    }
+    .C02{
+        background-color: #dff0d8;
+    }
+    .C03{
+        background-color: #f2dede;
+    }
+    .colormes{
+        background-color: #004d40;
+        color: #cccccc;
+    }
+    .colormesatrasado{
+               background-color: #F44336;
+        color: #cccccc;
+    }
+    .navbar-default {
+        background-color: #004d40;
+        border-color: #004d40;
+    }
+    </style>
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">INTERAUTO</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#enforma" aria-controls="enforma" role="tab" data-toggle="tab">En Forma</a></li>
+                <li role="presentation"><a href="#retrasos" aria-controls="profile" role="tab" data-toggle="tab">Retrasos</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="enforma">
+                        <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+                <div class="btn-group btn-group-lg">
+                    <button type="button" class="btn btn-default control" data-filter="all">Todos</button>
+                    <button type="button" class="btn btn-info control"  data-filter=".C01">ANY</button>
+                    <button type="button" class="btn btn-success control" data-filter=".C02">JENYY</button>
+                    <button type="button" class="btn btn-danger control" data-filter=".C03">PAU</button>
+                    <button type="button" class="btn btn-link control" data-filter="DX">DX</button>
+                </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <hr>
+
+
+<div class="row">
+    <div class="reads">
+                    <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">18</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+                 <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">19</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+             
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>           
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">20</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">21</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026251">
+                                    664-27
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">22</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47025948">
+                                    876-102
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">23</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026001">
+                                    1152-01
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026055">
+                                    919-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026080">
+                                    803-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026043">
+                                    1152-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026056">
+                                    927-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026057">
+                                    1021-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026039">
+                                    876-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47025997">
+                                    325-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026054">
+                                    861-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">24</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026109">
+                                    1038-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026073">
+                                    465-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026117">
+                                    394-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026123">
+                                    634-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026119">
+                                    803-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026259">
+                                    784-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026075">
+                                    759-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026112">
+                                    474-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026085">
+                                    1140-01
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026092">
+                                    919-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026121">
+                                    669-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">25</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026149">
+                                    863-43 CHINA
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026187">
+                                    701-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026176">
+                                    1062-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026141">
+                                    861-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026143">
+                                    769-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026182">
+                                    576-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">26</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026255">
+                                    745-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026264">
+                                    634-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026250">
+                                    669-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026225">
+                                    334-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026226">
+                                    334-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026260">
+                                    911-21
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">27</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026270">
+                                    876-DX38aaaa
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+                                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">28</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                            
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+                                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">29</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                               
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormes">30</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026240">
+                                    650-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+    </div>
+</div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="retrasos">
+
+                    <div class="row">
+        <div class="container">
+            <br>
+            <div class="reads">
+                             <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">2</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div> 
+                 <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">15</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>  
+                                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">17</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>   
+                                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">19</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>      
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">20</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026077">
+                                    759-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">21</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026251">
+                                    664-27
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">22</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47025948">
+                                    876-102
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">23</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026001">
+                                    1152-01
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026057">
+                                    1021-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026039">
+                                    876-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47025997">
+                                    325-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026054">
+                                    861-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">24</th>
+                        <tr>
+                        
+                        
+                        
+                       
+                        
+            
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026085">
+                                    1140-01
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026092">
+                                    919-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026121">
+                                    669-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">25</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026149">
+                                    863-43 CHINA
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026187">
+                                    701-DX39
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026176">
+                                    1062-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026141">
+                                    861-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026143">
+                                    769-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026182">
+                                    576-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">26</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026255">
+                                    745-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026264">
+                                    634-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026250">
+                                    669-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026225">
+                                    334-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026226">
+                                    334-DX41
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C03       " >
+                                    <a href="referencia/47026260">
+                                    911-21
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">27</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C02       " >
+                                    <a href="referencia/47026270">
+                                    876-DX38
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+                <div class="col-md-1 col-xs-1">
+                    <table class="table">
+                        <tr>
+                            <th class="mes colormesatrasado">30</th>
+                        <tr>
+                        
+                            <tr>
+                            
+                                <td class="mix C01       " >
+                                    <a href="referencia/47026240">
+                                    650-DX40
+                                        <div class="row">
+                                          <span class="label label-primary">1</span>
+                                        <span class="label label-success">2</span>
+                                        <span class="label label-warning">3</span>
+                                        <span class="label label-danger">4</span>
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        
+                    </table>
+                </div>
+            
+    </div>
+        </div>
+
+    </div>
+                </div>
+              </div>
+        </div>
+    <div>
+
+
+
+</div>
+    </div>
+
+
+    <!--  <div class="row">
+        <div class="col-md-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="colormes">Comprador</th>
+                    </tr>
+                </thead>
+            <tbody>
+            <tr>
+                <td class="comprador C01">ANY</td>
+            </tr>
+            <tr>
+                <td class="comprador C02">JENNY</td>
+            </tr>
+            <tr>
+                <td class="comprador C03">PAU</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>-->
+    <hr>
+
+
+
+
+  <script src="static/mixitup.min.js"></script>
+           <script>
+            var containerEl = document.querySelector('.reads');
+
+            var mixer = mixitup(containerEl);
+        </script>
+
