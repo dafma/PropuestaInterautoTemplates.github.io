@@ -1,0 +1,955 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interauto</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"  crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script src="https://use.fontawesome.com/9d2185a041.js"></script>
+    <style rel="stylesheet" type="text/css" href="static/style.css" ></style>
+    <style rel="stylesheet">
+
+        .mes{
+            background-color: #F57C00;
+        }
+        .C01{
+            background-color: #009688;
+        }
+        .C02{
+            background-color: #FFC107;
+
+        }
+        .C03{
+            background-color: #F57C00;
+        }
+        .rojo{
+            color: #ff1e26;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+        .amarillo{
+            color: #fff721;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+        .verde{
+            color: #27ff11;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+
+        .meses{
+            background-color: #FFA726;
+        }
+
+        .azul{
+            background-color: dodgerblue;
+        }
+        td{text-align: center}
+        th{
+            text-align: center;
+            font-size: xx-large;
+        }
+        .comprador{
+            font-size: large;
+        }
+        .btn-circle {
+          width: 10px;
+          height: 10px;
+          text-align: center;
+          padding: 6px 0;
+          font-size: 8px;
+          line-height: 1.428571429;
+          border-radius: 15px;
+        }
+          td {   text-align: center;}
+          #span1 { background-color: #2196F3; width: auto ; }
+          #span2 { background-color: #FFEB3B; width: auto;  }
+          #span3 { background-color: #f44336; width: auto;  }
+          #span4 { background-color: #388e3c; width: auto;  }
+    </style>
+    
+
+    
+
+</head>
+<body>
+
+
+
+
+<div class="row">
+    
+
+    
+</div>
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+
+<style>
+    .modal-dialog {
+    position: relative;
+    width: 100%;
+    margin: 10px;
+}
+</style>
+
+<script>
+    $(function(){
+    $('#exampleModal1').modal({
+        keyboard: true,
+        backdrop: "static",
+        show:false,
+
+    }).on('show', function(){
+          var getIdFromRow = $(event.target).closest('tr').data('id');
+        //make your ajax call populate items or what even you need
+        $(this).find('#orderDetails').html($('<h1> Order Id selected: ' + getIdFromRow  + '</h1>'))
+    });
+});
+
+
+$(document).ready(function() {
+
+    // AJAX GET
+    $('.get-more').click(function(){
+
+        $.ajax({
+            type: "GET",
+            url: "/ajax/more/",
+            success: function(data) {
+            for(i = 0; i < data.length; i++){
+                $('ul').append('<li>'+data[i]+'</li>');
+            }
+        }
+        });
+
+    });
+
+
+    // AJAX POST
+    $('.add-todo').click(function(){
+      console.log('am i called');
+
+        $.ajax({
+            type: "POST",
+            url: "/ajax/add/",
+            dataType: "json",
+            data: { "item": $(".todo-item").val() },
+            success: function(data) {
+                alert(data.message);
+            }
+        });
+
+    });
+
+
+
+    // CSRF code
+    function getCookie(name) {
+        var cookieValue = null;
+        var i = 0;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (i; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+});
+</script>
+
+</body>
+</html>
+
+
+    <style>
+    ._24{
+        background-color: #2196F3;
+    }
+        ul#menu li {
+        display:inline;
+    }
+    .C01{
+        background-color: #FFB74D;
+    }
+    .C02{
+       background-color: #B39DDB;
+    }
+    .C03{
+        background-color: #BBDEFB;
+    }
+    .xbC01{
+        background-color: #FFB74D;
+    }
+    .xbC02{
+       background-color: #B39DDB;
+    }
+    .xbC03{
+        background-color: #BBDEFB;
+    }
+    .btn-azul{
+        background-color: #2962FF;
+        color: #FFFFFF;
+    }
+    .btn-morado{
+        background-color: #6A1B9A;
+        color: #FFFFFF;
+    }
+    .btn-naranja{
+        background-color: #FF9800;
+        color: #FFFFFF;
+    }
+    .btn-todos{
+        background-color: #F44336;
+        color: #ffffff;
+    }
+    .colormes{
+        background-color: #004d40;
+        color: #cccccc;
+    }
+    .colormesatrasado{
+               background-color: #F44336;
+        color: #cccccc;
+    }
+    .navbar-default {
+        background-color: #004d40;
+        border-color: #004d40;
+    }
+    </style>
+    <style type="text/css">
+
+    .emphasis
+    {
+        border-top: 4px solid transparent;
+        }
+    .emphasis:hover
+    {
+        border-top: 4px solid #1abc9c;
+        }
+    .emphasis h2
+    {
+        margin-bottom:0;
+        }
+    .emphasisa
+    {
+        border-top: 4px solid transparent;
+
+        }
+    .emphasisa:hover
+    {
+        border-top: 4px solid #1a41bc;
+        }
+    .emphasisa h2
+    {
+        margin-bottom:0;
+        }
+    .backorderc{
+        -webkit-column-count: 3; /* Chrome, Safari, Opera */
+        -moz-column-count: 3; /* Firefox */
+        column-count: 3;
+        -webkit-column-gap: 40px; /* Chrome, Safari, Opera */
+        -moz-column-gap: 40px; /* Firefox */
+        column-gap: 40px;
+        -webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+        -moz-column-rule-style: solid; /* Firefox */
+        column-rule-style: solid;
+            word-spacing: 1rem;
+    }
+        .emphasisv
+    {
+        border-top: 4px solid transparent;
+        }
+    .emphasisv:hover
+    {
+        border-top: 4px solid #32bc0d;
+        }
+    .emphasisv h2
+    {
+        margin-bottom:0;
+        }
+        .emphasisr
+    {
+        border-top: 4px solid transparent;
+        }
+    .emphasisr:hover
+    {
+        border-top: 4px solid #bc1b1a;
+        }
+    .emphasisr h2
+    {
+        margin-bottom:0;
+        }
+        .emphasisam
+    {
+        border-top: 5px solid transparent;
+        }
+    .emphasisam:hover
+    {
+        border-top: 5px solid #FFFF00;
+        }
+    .emphasisam h2
+    {
+        margin-bottom:0;
+        }
+    span.tags
+    {
+        background: #1abc9c;
+        color: #f5f5f5;
+        }
+    .dropdown-menu .divider
+    {
+        background:none;
+        }
+    .dropdown-menu>li>a
+    {
+        color:#f5f5f5;
+        }
+    .dropup .dropdown-menu
+    {  margin-bottom:10px;
+    }
+    .col-xs-1 {
+        width: auto;
+    min-width: 0;
+        }
+    .container-fluid:before{
+    content:none;
+}
+
+.container-fluid:after{
+     content:none;
+}
+    . label-danger {
+    background-color: #f032ba;
+}
+    .aduana{
+        background-color: #E91E63;
+        color: #ffffff;
+    }
+    .ecp{
+        background-color: #3F51B5;
+        color: #ffffff;
+    }
+    .arribado{
+        background-color: #673AB7;
+        color: #ffffff;
+    }
+    .thaduana{}
+    .gopa{
+        background-color: #006064;
+        color: #eeeeee;
+    }
+    .dias{
+        background-color: #2962FF;
+        color: #eeeeee;
+    }
+    .plus{
+    background-color: #01579B;
+        color: #ffffff;
+    }
+    .glomex{
+        background-color: #006064;
+        color: #ffffff;
+    }
+    .hellman{
+        background-color: #2196F3 ;
+        color: #ffffff;
+    }
+    .amarillo{
+        background-color: #FFEA00;
+        color: #262626;
+    }
+    </style>
+
+
+    <div class="row">
+    <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 25-31 Ago </span>
+                        <br>
+                        <span class="label label-success"> Sem 36</span>
+                        <br>
+                        <span class="label  label-danger"> 12Sep</span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+            <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 18-24 Ago</span>
+                        <br>
+                        <span class="label label-success"> Sem 35</span>
+                        <br>
+                        <span class="label  label-danger"> 12Sep</span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table >
+    </div>
+            <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 11-17 Ago</span>
+                        <br>
+                        <span class="label label-success"> Sem 34</span>
+                        <br>
+                        <span class="label  label-danger"> 29 Ago</span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+         <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 4-10 Ago</span>
+                        <br>
+                        <span class="label label-success"> Sem 33</span>
+                        <br>
+                        <span class="label  label-danger"> 22 Ago</span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+         <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 28 jul- 3 Ago</span>
+                        <br>
+                        <span class="label label-success"> Sem 32 </span>
+                        <br>
+                        <span class="label  label-danger"> 15 Ago </span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr >
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr >            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr >            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+         <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 21 - 27 jul</span>
+                        <br>
+                        <span class="label label-success"> Sem 31 </span>
+                        <br>
+                        <span class="label  label-danger"> 8 Ago </span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+             <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+             <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+                 <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 14 - 20 jul</span>
+                        <br>
+                        <span class="label label-success"> Sem 30 </span>
+                        <br>
+                        <span class="label  label-danger"> 1 Ago </span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+             <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr  class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+             <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr> <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr> <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+             <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+             <div class="col-md-1 col-xs-1 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 13 - 17 jul </span>
+                        <br>
+                        <span class="label label-success"> Sem 29 </span>
+                        <br>
+                        <span class="label  label-danger"> 25 Jul </span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+             <tr class="plus">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr >
+            <tr class="plus">
+                <td>465-DX37</td>
+            </tr>            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr> <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>            <tr class="glomex">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr> <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+             <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            <tr class="hellman">
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-1 col-xs-1 aduana">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td class="thaduana">
+                        ADUANA
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+             <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="col-md-1 col-xs-1 arribado">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td>
+                        ARRIBADO
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+           <div class="col-md-1 col-xs-1 arribado">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td>
+                        PAG. PED.
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+           <div class="col-md-1 col-xs-1 arribado">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td>
+                        SOL
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                       <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+               <div class="col-md-1 col-xs-1 gopa">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td>
+                        GONDOLA
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                        <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+                       <div class="col-md-1 col-xs-1 gopa">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <td>PENTACO
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                        <tr>
+                <td>465-DX37</td>
+            </tr>
+            <tr>
+                <td>465-DX37</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="col-md-1 col-xs-1 dias">
+            <table class="table ">
+            <thead>
+                <tr>
+                    <td>
+                        <span class="label label-primary"> 7 - 11 ago </span>
+                        <br>
+                        <span class="label label-success"> Sem 32 </span>
+                        <br>
+
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>465-DX37 <span class="label  label-danger"> 7 </span></td>
+            </tr>
+                        <tr>
+                <td>465-DX37 <span class="label  label-danger"> 7 </span></td>
+            </tr>
+                        <tr>
+                <td>465-DX37 <span class="label  label-danger"> 7 </span></td>
+            </tr>
+                        <tr>
+                <td>465-DX37 <span class="label  label-danger"> 7 </span></td>
+            </tr>
+            <tr>
+                <td>465-DX37<span class="label  label-danger"> 8 </span></td>
+            </tr>
+            <tr>
+                <td>465-DX37<span class="label  label-danger"> 8 </span></td>
+            </tr>
+                        <tr>
+                <td>465-DX37<span class="label  label-danger"> 9 </span></td>
+            </tr>
+                        <tr>
+                <td>465-DX37<span class="label  label-danger"> 10 </span></td>
+            </tr>
+                                    <tr>
+                <td>465-DX37<span class="label  label-danger"> 10 </span></td>
+            </tr>
+                                    <tr>
+                <td>465-DX37<span class="label  label-danger"> 11 </span></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <br>
+    <div class="col-md-2 col-xs-2 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>FORWATER</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="plus">Plus</td>
+
+
+                </tr>
+                <tr>
+                    <td class="glomex">Glomex</td>
+                </tr>
+                <tr>
+                    <td class="hellman">Hellman</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="col-md-2 col-xs-2 ecp">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ANEXOS</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="amarillo">Facturas</td>
+                </tr>
+                <tr>
+                    <td class="amarillo">Impuestos</td>
+                </tr>
+                <tr>
+                    <td class="amarillo">Peca</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
