@@ -767,11 +767,18 @@ textarea:focus {
 	position: relative;
 }
 
+/*
 .services-style-one .outer-box {
-	position: relative;
-	background: #1c1c1c;
-}
+	background-image: url(../images/reads.jpg);
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
 
+
+}
+*/
 .services-style-one .services-column {
 	position: relative;
 	width: 50%;
@@ -815,7 +822,7 @@ textarea:focus {
 	float: left;
 	width: 50%;
 	background: #1c1c1c;
-	text-align: right;
+
 }
 
 .services-style-one .content-column .content-box {
